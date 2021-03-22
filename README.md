@@ -4,7 +4,7 @@
 This is a React TypeScript boilerplate app built with the purpose of supporting post exercises, and also to provide our followers with a good start point when building web apps fetching data from GraphQL APIs. It also uses Material Design and CSS-in-JS.
 
 ## Demo
-Keen to see the app in action? Check it out the [live demo](https://wd-react-graphql-app.vercel.app/)!
+Keen to see the app in action? Check it out the [live demo](https://weldev-react-graphql-client.vercel.app/)!
 
 ## Features
 The following frameworks/libraries have been implemented:
