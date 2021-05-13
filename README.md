@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to a new app template built by Welcome, Developer! This is a boilerplate app built using React, Material-UI, and Apollo GraphQL.
+Welcome to a new app template built by Welcome, Developer! This is a boilerplate app built using React, TypeScript, Material-UI, and Apollo GraphQL.
 
 Hope you enjoy it, developers!
 
