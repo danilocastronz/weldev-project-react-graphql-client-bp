@@ -1,10 +1,10 @@
 <img width="100%" height="300" src="./graphql.svg" />
 
-# React, GraphQL boilerplate by Welcome, Developer
+# React, GraphQL, Apollo boilerplate
 
 ## Introduction
 
-Welcome to a new app template built by Welcome, Developer! This is a boilerplate app built using React, TypeScript, Material-UI, and Apollo GraphQL.
+Welcome to a new app template built by [Welcome, Developer](https://www.welcomedeveloper.com)! This is a boilerplate app built using React, TypeScript, Material-UI, and Apollo GraphQL.
 
 Hope you enjoy it, developers!
 
