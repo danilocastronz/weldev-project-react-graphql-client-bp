@@ -1,3 +1,5 @@
+<img width="100%" height="300" src="./graphql.svg" />
+
 # React, GraphQL boilerplate by Welcome, Developer
 
 ## Introduction
