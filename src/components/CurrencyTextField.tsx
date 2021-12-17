@@ -1,4 +1,3 @@
-import { FC } from "react";
 import {
   FormControl,
   InputLabel,
@@ -7,10 +6,15 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 
-const CurrencyTextField: FC<{
+interface CurrencyTextFieldProps {
   amount: number;
   handleChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
-}> = ({ amount, handleChange }) => {
+}
+
+export const CurrencyTextField = ({
+  amount,
+  handleChange,
+}: CurrencyTextFieldProps) => {
   return (
     <Tooltip title="Inform Currency Amount" placement="bottom">
       <FormControl variant="outlined">
@@ -27,5 +31,3 @@ const CurrencyTextField: FC<{
     </Tooltip>
   );
 };
-
-export default CurrencyTextField;

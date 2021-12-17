@@ -1,4 +1,3 @@
-import { FC } from "react";
 import {
   FormControl,
   InputLabel,
@@ -6,15 +5,12 @@ import {
   MenuItem,
   Tooltip,
 } from "@material-ui/core";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import Currency from "../model/Currency.model";
+import data from "../data/Currencies";
 
-// currency data
-import data from "../data/currencies";
-
-// define css-in-js
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     formControl: {
       minWidth: 120,
@@ -22,12 +18,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CurrencySelection: FC<{
-  currencyCode?: Currency | null;
-  handleChange: (currency: Currency | null) => void;
-}> = ({ currencyCode, handleChange }) => {
-  const classes = useStyles();
+interface CurrencySelectionProps {
+  currencyCode: Currency;
+  handleChange: (currency: Currency) => void;
+}
 
+export const CurrencySelection = ({
+  currencyCode,
+  handleChange,
+}: CurrencySelectionProps) => {
+  const classes = useStyles();
   return (
     <Tooltip title="Select Currency" placement="bottom">
       <FormControl className={classes.formControl} variant="outlined">
@@ -35,24 +35,23 @@ const CurrencySelection: FC<{
         <Select
           labelId="selection-currency-select-label"
           id="selection-currency"
-          value={currencyCode ? currencyCode.code : undefined}
+          value={currencyCode.code}
           onChange={(event) => {
-            event.target.value !== undefined ? handleChange({ name: event.target.value as string, code: event.target.value as string }) : handleChange(null)
+            handleChange({
+              name: event.target.value as string,
+              code: event.target.value as string,
+            });
           }}
           autoWidth
           label="Currency"
         >
-          <MenuItem value={undefined}>None</MenuItem>
           {data.map((currency: Currency, index: number) => (
-            <MenuItem
-              key={index}
-              value={currency.code}
-            >{`${currency.name}`}</MenuItem>
+            <MenuItem key={`currency-${currency.code}`} value={currency.code}>
+              {currency.name}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
-    </Tooltip >
+    </Tooltip>
   );
 };
-
-export default CurrencySelection;

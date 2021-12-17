@@ -1,16 +1,16 @@
-import { ComponentType, FC } from "react";
+import { ComponentType } from "react";
 
 // RouteItem is an interface for defining the application routes and navigation menu items
 interface RouteItem {
-    menuId: String
-    title: String
-    tooltip?: String
-    path?: String
-    component?: FC<{}>
-    enabled: boolean
-    icon?: ComponentType
-    subRoutes?: Array<RouteItem>
-    appendDivider?: boolean
+  menuID: string;
+  title: string;
+  tooltip?: string;
+  path?: string;
+  component?: ComponentType;
+  enabled: boolean;
+  icon?: ComponentType;
+  subRoutes?: RouteItem[];
+  appendDivider?: boolean;
 }
 
 export default RouteItem;

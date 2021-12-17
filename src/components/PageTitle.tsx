@@ -1,9 +1,7 @@
-import React, { FC, ReactElement } from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
-// define css-in-js
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     title: {
       textTransform: "uppercase",
@@ -11,13 +9,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const PageTitle: FC<{ title: String }> = ({ title }): ReactElement => {
+export const PageTitle = ({ title }: { title: string }) => {
   const classes = useStyles();
   return (
-    <Typography variant="h5" className={classes.title} color="textSecondary" gutterBottom>
+    <Typography
+      variant="h5"
+      className={classes.title}
+      color="textSecondary"
+      gutterBottom
+    >
       {title}
     </Typography>
   );
 };
-
-export default PageTitle;

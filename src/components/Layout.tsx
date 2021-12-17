@@ -1,17 +1,14 @@
-import React, { FC, ReactNode, useReducer } from "react";
+import { FC, ReactNode, useReducer } from "react";
 import clsx from "clsx";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
-// components
-import Header from "./Header";
-import Navigation from "./Navigation";
-import Footer from "./Footer";
+import { Header } from "./Header";
+import { Navigation } from "./Navigation";
+import { Footer } from "./Footer";
 
-// constants
 import { DRAWER_WIDTH, FOOTER_HEIGHT } from "../utils/constants";
 
-// define css-in-js
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -42,15 +39,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// define interface to represent component props
-interface Props {
+interface LayoutProps {
   toggleTheme: () => void;
   useDefaultTheme: boolean;
   children: ReactNode;
 }
 
-// functional component
-const Layout: FC<Props> = ({ toggleTheme, useDefaultTheme, children }) => {
+export const Layout: FC<LayoutProps> = ({
+  toggleTheme,
+  useDefaultTheme,
+  children,
+}) => {
   const classes = useStyles();
   const [open, toggle] = useReducer((open) => !open, true);
   return (
@@ -77,5 +76,3 @@ const Layout: FC<Props> = ({ toggleTheme, useDefaultTheme, children }) => {
     </div>
   );
 };
-
-export default Layout;

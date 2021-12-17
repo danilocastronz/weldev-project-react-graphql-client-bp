@@ -1,34 +1,23 @@
-import React, {
-  FC,
-  ReactElement,
-  useState,
-  useEffect,
-} from "react";
-import { Helmet } from "react-helmet";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Grid, Paper, Typography, Button } from "@material-ui/core";
 import { useLazyQuery } from "@apollo/client";
-import SwapIcon from '@material-ui/icons/SwapHorizRounded';
+import { Button, Grid, Paper, Typography } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import SwapIcon from "@material-ui/icons/SwapHorizRounded";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 
-// components
-import PageTitle from "../../components/PageTitle";
-import CurrencyResult from "../../components/CurrencyResult";
-import CurrencySelection from "../../components/CurrencySelection";
-import CurrencyTextField from "../../components/CurrencyTextField";
+import { CurrencyResult } from "../../components/CurrencyResult";
+import { CurrencySelection } from "../../components/CurrencySelection";
+import { CurrencyTextField } from "../../components/CurrencyTextField";
+import { PageTitle } from "../../components/PageTitle";
+import { Conversion } from "../../model/Conversion.model";
 
-// constants
+import Currency from "../../model/Currency.model";
+import { GET_CURRENCIES } from "../../queries";
 import {
   APP_TITLE,
   PAGE_TITLE_GRAPHQL_API_CURRENCY,
 } from "../../utils/constants";
 
-// app graphql queries
-import { GET_CURRENCIES } from "../../queries";
-
-// model
-import Currency from "../../model/Currency.model";
-
-// define css-in-js
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -47,37 +36,36 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CurrencyPage: FC<{}> = (): ReactElement => {
+export const CurrencyPage = () => {
   const classes = useStyles();
-  const [currencySource, setCurrencySource] = useState<Currency | null>({
+  const [currencySource, setCurrencySource] = useState<Currency>({
     name: "New Zealand Dollar",
     code: "NZD",
   });
-  const [currencyDestination, setCurrencyDestination] = useState<Currency | null>({
+  const [currencyDestination, setCurrencyDestination] = useState<Currency>({
     name: "US Dollar",
     code: "USD",
   });
   const [amount, setAmount] = useState(1);
-  const [getCurrencies, { loading, data, error }] = useLazyQuery(
-    GET_CURRENCIES
-  );
+  const [getCurrencies, { loading, data, error }] =
+    useLazyQuery<Conversion>(GET_CURRENCIES);
 
   useEffect(
-    () => getCurrencies({ variables: { currency: currencySource && currencySource.code } }),
-    [currencySource, currencyDestination, amount]
+    () =>
+      getCurrencies({
+        variables: { currency: currencySource && currencySource.code },
+      }),
+    [currencySource]
   );
 
-  const handleAmount = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleAmount = (event: React.ChangeEvent<{ value: unknown }>) =>
     setAmount(event.target.value as number);
-  };
 
-  const handleCurrencySource = (currency: Currency | null) => {
+  const handleCurrencySource = (currency: Currency) =>
     setCurrencySource(currency);
-  };
 
-  const handleCurrencyDestination = (currency: Currency | null) => {
+  const handleCurrencyDestination = (currency: Currency) =>
     setCurrencyDestination(currency);
-  };
 
   const handleCurrencySwap = () => {
     setCurrencyDestination(currencySource);
@@ -93,8 +81,11 @@ const CurrencyPage: FC<{}> = (): ReactElement => {
       </Helmet>
       <PageTitle title={PAGE_TITLE_GRAPHQL_API_CURRENCY} />
       <div>
-        <Typography variant="body1" gutterBottom>The conversion rates in this example are provided by the Coinbase API, through a GraphQL server instance. You can find it on the "Get started" section of the Apollo Client docs.</Typography>
-        {/* currency conversion form */}
+        <Typography variant="body1" gutterBottom>
+          The conversion rates in this example are provided by the Coinbase API,
+          through a GraphQL server instance. You can find it on the "Get
+          started" section of the Apollo Client docs.
+        </Typography>
         <Paper elevation={3} className={classes.paper}>
           <Grid
             container
@@ -142,7 +133,7 @@ const CurrencyPage: FC<{}> = (): ReactElement => {
                   <Typography variant="body2" className={classes.label}>
                     To
                   </Typography>
-                  <Button onClick={handleCurrencySwap} variant='contained'>
+                  <Button onClick={handleCurrencySwap} variant="contained">
                     <SwapIcon color="primary" />
                   </Button>
                 </Grid>
@@ -156,22 +147,17 @@ const CurrencyPage: FC<{}> = (): ReactElement => {
             </Grid>
           </Grid>
         </Paper>
-        {/* handle api response */}
-        {amount > 0 &&
-          currencySource &&
-          currencyDestination ? (
-            <CurrencyResult
-              data={data}
-              loading={loading}
-              error={error}
-              amount={amount}
-              currencySource={currencySource}
-              currencyDestionation={currencyDestination}
-            />
-          ) : null}
+        {amount > 0 && currencySource && currencyDestination ? (
+          <CurrencyResult
+            data={data}
+            loading={loading}
+            error={error}
+            amount={amount}
+            currencySource={currencySource}
+            currencyDestination={currencyDestination}
+          />
+        ) : null}
       </div>
     </>
   );
 };
-
-export default CurrencyPage;

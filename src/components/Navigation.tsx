@@ -1,16 +1,12 @@
-import React, { FC, ReactElement } from "react";
 import clsx from "clsx";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { IconButton, Drawer } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-// components
-import AppMenu from "./AppMenu";
+import { AppMenu } from "./AppMenu";
 
-// constants
 import { DRAWER_WIDTH } from "../utils/constants";
 
-// define css-in-js
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawer: {
@@ -47,38 +43,33 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// define interface to represent component props
-interface Props {
+interface NavigationProps {
   open: boolean;
   handleMenuClose: () => void;
 }
 
-const Navigation: FC<Props> = ({ open, handleMenuClose }): ReactElement => {
+export const Navigation = ({ open, handleMenuClose }: NavigationProps) => {
   const classes = useStyles();
   return (
-    <>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
+    <Drawer
+      variant="permanent"
+      className={clsx(classes.drawer, {
+        [classes.drawerOpen]: open,
+        [classes.drawerClose]: !open,
+      })}
+      classes={{
+        paper: clsx({
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleMenuClose}>
-            <ChevronLeftIcon htmlColor="#fff" />
-          </IconButton>
-        </div>
-        <AppMenu />
-      </Drawer>
-    </>
+        }),
+      }}
+    >
+      <div className={classes.toolbar}>
+        <IconButton onClick={handleMenuClose}>
+          <ChevronLeftIcon htmlColor="#fff" />
+        </IconButton>
+      </div>
+      <AppMenu />
+    </Drawer>
   );
 };
-
-export default Navigation;

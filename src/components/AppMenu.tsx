@@ -1,5 +1,5 @@
-import React, { FC, ReactElement, useState } from "react";
-import clsx from 'clsx';
+import { Fragment, useState } from "react";
+import clsx from "clsx";
 import {
   List,
   Divider,
@@ -9,22 +9,21 @@ import {
   Collapse,
   Icon,
   Tooltip,
-  IconButton
+  IconButton,
 } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import DefaultIcon from "@material-ui/icons/FileCopy";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import { useLocation } from 'react-router-dom';
+import {
+  FileCopy as DefaultIcon,
+  ExpandMore,
+  ExpandLess,
+} from "@material-ui/icons";
+import { useLocation } from "react-router-dom";
 
-// components
-import MenuItem from "./MenuItem";
-// app routes
-import routes from "../config/routes";
-// interfaces
+import { MenuItem } from "./MenuItem";
+
+import { GetRoutes } from "../config/routes";
 import RouteItem from "../model/RouteItem.model";
 
-// define css-in-js
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     divider: {
@@ -37,34 +36,41 @@ const useStyles = makeStyles((theme: Theme) =>
     selected: {
       transition: "box-shadow",
       transitionDuration: "1s",
-      boxShadow: `0 0 3px ${theme.palette.primary.main}, 0 0 9px ${theme.palette.primary.main}, 0 0 11px ${theme.palette.primary.main}, 0 0 30px ${theme.palette.primary.main}`
+      boxShadow: `0 0 3px ${theme.palette.primary.main}, 0 0 9px ${theme.palette.primary.main}, 0 0 11px ${theme.palette.primary.main}, 0 0 30px ${theme.palette.primary.main}`,
     },
   })
 );
 
-// functional component
-const AppMenu: FC<{}> = (): ReactElement => {
+export const AppMenu = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const location: any = useLocation();
+  const location = useLocation();
 
-  const handleClick = (): void => {
+  const handleClick = () => {
     setOpen(!open);
   };
 
   return (
     <List>
-      {routes.map((route: RouteItem, index: number) => (
-        <>
+      {GetRoutes().map((route: RouteItem, index: number) => (
+        <Fragment key={`menu-${route.menuID}`}>
           {route.subRoutes ? (
             <>
-              <ListItem button onClick={handleClick}>
+              <ListItem
+                key={`route-item-nav-${route.menuID}`}
+                button
+                onClick={handleClick}
+              >
                 <ListItemIcon>
                   <IconButton
                     className={clsx({
-                      [classes.selected]: !open && route.subRoutes.some((item: RouteItem) => item.path === location.pathname)
+                      [classes.selected]:
+                        !open &&
+                        route.subRoutes.some(
+                          (item: RouteItem) => item.path === location.pathname
+                        ),
                     })}
-                    size='small'
+                    size="small"
                   >
                     <Icon component={route.icon || DefaultIcon} />
                   </IconButton>
@@ -75,16 +81,16 @@ const AppMenu: FC<{}> = (): ReactElement => {
                     <ExpandLess />
                   </Tooltip>
                 ) : (
-                    <Tooltip title="Expand" placement="bottom">
-                      <ExpandMore />
-                    </Tooltip>
-                  )}
+                  <Tooltip title="Expand" placement="bottom">
+                    <ExpandMore />
+                  </Tooltip>
+                )}
               </ListItem>
               <Collapse in={open} timeout="auto" unmountOnExit>
                 <List className={classes.nested}>
                   {route.subRoutes.map((sRoute: RouteItem) => (
                     <MenuItem
-                      menuId={route.menuId}
+                      menuID={route.menuID}
                       title={sRoute.title}
                       icon={sRoute.icon}
                       tooltip={sRoute.tooltip}
@@ -98,22 +104,20 @@ const AppMenu: FC<{}> = (): ReactElement => {
               </Collapse>
             </>
           ) : (
-              <MenuItem
-                menuId={route.menuId}
-                title={route.title}
-                icon={route.icon}
-                tooltip={route.tooltip}
-                path={route.path}
-                enabled={route.enabled}
-                component={route.component}
-                subRoutes={route.subRoutes}
-              />
-            )}
+            <MenuItem
+              menuID={route.menuID}
+              title={route.title}
+              icon={route.icon}
+              tooltip={route.tooltip}
+              path={route.path}
+              enabled={route.enabled}
+              component={route.component}
+              subRoutes={route.subRoutes}
+            />
+          )}
           {route.appendDivider && <Divider className={classes.divider} />}
-        </>
+        </Fragment>
       ))}
-    </List >
+    </List>
   );
 };
-
-export default AppMenu;

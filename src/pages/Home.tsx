@@ -1,16 +1,12 @@
-import React, { FC, ReactElement } from "react";
 import { Helmet } from "react-helmet";
 import { Typography, Link } from "@material-ui/core";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 
-// components
-import PageTitle from "../components/PageTitle";
+import { PageTitle } from "../components/PageTitle";
 
-// constants
 import { APP_TITLE, PAGE_TITLE_HOME } from "../utils/constants";
 
-// define css-in-js
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flex: 1,
@@ -20,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const HomePage: FC<{}> = (): ReactElement => {
+export const HomePage = () => {
   const classes = useStyles();
   return (
     <>
@@ -35,8 +31,8 @@ const HomePage: FC<{}> = (): ReactElement => {
           Overview
         </Typography>
         <Typography variant="body1" gutterBottom>
-          This is a React application template built using TypeScript, GraphQL, Material-UI
-          and React Router.
+          This is a React application template built using TypeScript, GraphQL,
+          Material-UI and React Router.
         </Typography>
         <Typography variant="h6" gutterBottom>
           Description
@@ -69,5 +65,3 @@ const HomePage: FC<{}> = (): ReactElement => {
     </>
   );
 };
-
-export default HomePage;

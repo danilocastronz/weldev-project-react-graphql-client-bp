@@ -1,11 +1,8 @@
-import React, { FC, ReactElement } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Link } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 
-// constants
 import { FOOTER_TEXT, FOOTER_HEIGHT } from "../utils/constants";
 
-// define css-in-js
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -21,16 +18,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// functional component
-const Footer: FC<{}> = (): ReactElement => {
+export const Footer = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Link href={`${process.env.REACT_APP_API_URL}`} target='_blank' rel="noreferrer" className={classes.footer}>
+      <Link
+        href={`${process.env.REACT_APP_API_URL}`}
+        target="_blank"
+        rel="noreferrer"
+        className={classes.footer}
+      >
         {FOOTER_TEXT}
       </Link>
     </div>
   );
 };
-
-export default Footer;

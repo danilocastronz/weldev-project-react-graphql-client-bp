@@ -1,13 +1,11 @@
-import { FC } from "react";
-import { Grid, CircularProgress, Typography } from "@material-ui/core";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { ApolloError } from "@apollo/client";
+import { CircularProgress, Grid, Typography } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import numeral from "numeral";
 
-// model
+import { Conversion, Rate } from "../model/Conversion.model";
 import Currency from "../model/Currency.model";
 
-// define css-in-js
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     result: {
@@ -16,68 +14,65 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CurrencyResult: FC<{
-  data?: any;
+interface CurrencyResultProps {
+  data?: Conversion;
   loading?: boolean;
-  error?: ApolloError | undefined;
+  error?: ApolloError;
   amount: number;
   currencySource: Currency;
-  currencyDestionation: Currency;
-}> = ({
+  currencyDestination: Currency;
+}
+
+export const CurrencyResult = ({
   data,
   loading,
   error,
   amount,
   currencySource,
-  currencyDestionation,
-}) => {
-    const classes = useStyles();
+  currencyDestination,
+}: CurrencyResultProps) => {
+  const classes = useStyles();
+  const currentCurrency = data?.rates?.find(
+    (rate: Rate) => rate.currency === currencyDestination.code
+  );
 
-    const handleData = (rates: Array<any>): React.ReactElement | null => {
-      const current = rates.filter(
-        (e) => e.currency === currencyDestionation.code
-      );
-      return current ? (
-        <Grid
-          container
-          direction="column"
-          justify="flex-start"
-          alignItems="flex-start"
-          spacing={1}
-        >
+  return (
+    <div className={classes.result}>
+      <Grid container>
+        {loading && (
           <Grid item>
-            <Typography variant="h5" color="textSecondary">
-              {`${amount} ${currencySource.name} (${currencySource.code}) equals `}
-            </Typography>
+            Loading, please wait...
+            <CircularProgress />
           </Grid>
-          <Grid item>
-            <Typography variant="h4" color="textPrimary">
-              {`${numeral(amount * current[0].rate).format("0.00")} ${current[0].name
-                } (${current[0].currency})`}
-            </Typography>
-          </Grid>
-        </Grid>
-      ) : null;
-    };
-
-    return (
-      <div className={classes.result}>
-        <Grid container>
-          {loading && (
+        )}
+        {error && (
+          <Grid
+            item
+          >{`Oh no, something went wrong. Error: ${error.message}`}</Grid>
+        )}
+        {currentCurrency && (
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="flex-start"
+            spacing={1}
+          >
             <Grid item>
-              Loading, please wait...
-              <CircularProgress />
+              <Typography variant="h5" color="textSecondary">
+                {`${amount} ${currencySource.name} (${currencySource.code}) equals `}
+              </Typography>
             </Grid>
-          )}
-          {error && (
-            <Grid
-              item
-            >{`Oh no, something went wrong. Error: ${error.message}`}</Grid>
-          )}
-          {data && data.rates && handleData(data.rates)}
-        </Grid>
-      </div>
-    );
-  };
-
-export default CurrencyResult;
+            <Grid item>
+              <Typography variant="h4" color="textPrimary">
+                {`${numeral(amount * currentCurrency.rate).format("0.00")} ${
+                  currentCurrency.currency
+                } (${currentCurrency.currency})`}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
+      </Grid>
+    </div>
+  );
+};

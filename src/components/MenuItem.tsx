@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from "react";
+import React, { Fragment } from "react";
 import clsx from "clsx";
 import {
   ListItem,
@@ -12,10 +12,8 @@ import DefaultIcon from "@material-ui/icons/FileCopy";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { NavLink, useLocation } from "react-router-dom";
 
-// models
 import RouteItem from "../model/RouteItem.model";
 
-// define css-in-js
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     selected: {
@@ -32,23 +30,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// functional component
-const MenuItem: FC<RouteItem> = (route: RouteItem): ReactElement => {
+export const MenuItem = (route: RouteItem) => {
   const classes = useStyles();
   const location: any = useLocation();
 
   const handleNavigate = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ): void => {
+  ) => {
     if (!route.enabled) e.preventDefault();
   };
 
   return (
-    <div id={`${route.menuId}`}>
+    <Fragment key={`${route.menuID}`}>
       <NavLink
         to={`${route.path}`}
         style={{ textDecoration: "none", color: "inherit" }}
-        key={`${route.menuId + "nav"}`}
+        key={`${route.menuID + "nav"}`}
         onClick={handleNavigate}
         className={clsx({
           [classes.listItemDisabled]: !route.enabled,
@@ -70,8 +67,6 @@ const MenuItem: FC<RouteItem> = (route: RouteItem): ReactElement => {
           </ListItem>
         </Tooltip>
       </NavLink>
-    </div>
+    </Fragment>
   );
 };
-
-export default MenuItem;
