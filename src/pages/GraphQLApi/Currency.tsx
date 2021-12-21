@@ -55,7 +55,7 @@ export const CurrencyPage = () => {
       getCurrencies({
         variables: { currency: currencySource && currencySource.code },
       }),
-    [currencySource]
+    [currencySource, getCurrencies]
   );
 
   const handleAmount = (event: React.ChangeEvent<{ value: unknown }>) =>
